@@ -1,7 +1,9 @@
 # fastapi
 PIP installaton:
+
 pip install db-sqlite3
- pip install ORM-SQLite
+
+pip install ORM-SQLite
 
 #   sqlite3 commands:
 sqlite3 address_book.db
