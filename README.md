@@ -18,7 +18,11 @@ uvicorn main:app --port 8005 --reload
 
 # (FASTAPI SWAGGER)
 http://127.0.0.1:8005/docs#/    (FASTAPI SWAGGER)
+
 (POST - Create address,
+
 PUT - Update address,
+
 DELETE - Deleting address with id number,
+
 GET - Getting addresses within address
