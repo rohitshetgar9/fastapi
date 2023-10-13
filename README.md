@@ -1,3 +1,7 @@
+# Activating venv
+python3 -m venv venv
+source venv/bin/activate
+
 # fastapi
 pip or pip3 installaton:
 
@@ -5,10 +9,12 @@ pip install db-sqlite3
 
 pip install ORM-SQLite
 
-pip install -r requirements.txt
-or
-pip3 install -r requirements.txt
 
+pip install -r requirements.txt
+
+or
+
+pip3 install -r requirements.txt
 
 #   sqlite3 commands:
 sqlite3 address_book.db
