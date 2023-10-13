@@ -5,8 +5,11 @@ pip install db-sqlite3
 
 #   sqlite3 commands:
 sqlite3 address_book.db
+
 SELECT * FROM addresses;
+
 delete from addresses where id=3;
+
 SELECT * FROM addresses;
 .exit
 
