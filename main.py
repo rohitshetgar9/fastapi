@@ -12,7 +12,8 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import sqlite3
-from math import radians, sin, cos, sqrt, atan2
+from geopy.distance import geodesic
+
 
 app = FastAPI()
 
@@ -89,22 +90,9 @@ def delete_address(id:int):
     return id
 
 
-@app.get("/addresses/")
-def get_addresses_within_distance(city: str, latitude: float, longitude: float, max_distance_km: float):
-    conn = sqlite3.connect(db)
-    cursor = conn.cursor()
-
-    # Convert latitude and longitude to radians
-    lat1 = radians(latitude)
-    lon1 = radians(longitude)
-
-    # SQL query to select addresses within a given distance using the Haversine formula
-    cursor.execute("SELECT city, latitude, longitude FROM addresses WHERE \
-                    6371 * 2 * ASIN(SQRT(POWER(SIN((? - ABS(latitude)) * pi()/180 / 2), 2) + \
-                    COS(? * pi()/180 ) * COS(ABS(latitude) * pi()/180) * POWER(SIN((? - longitude) * pi()/180 / 2), 2))) <= ?",
-                   (lat1, lat1, lon1, max_distance_km))
-
-    addresses = cursor.fetchall()
-    conn.close()
-    return addresses
+@app.get("/calculate_distance/")
+def calculate_distance(lat1: float, lon1: float, lat2: float, lon2: float):
+    # Calculate the distance using geodesic
+    distance = geodesic((lat1, lon1), (lat2, lon2)).kilometers
+    return {"distance_km": distance}
 
