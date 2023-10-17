@@ -12,7 +12,7 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import sqlite3
-from geopy.distance import geodesic
+from math import radians, sin, cos, sqrt, atan2
 
 
 app = FastAPI()
@@ -90,9 +90,46 @@ def delete_address(id:int):
     return id
 
 
-@app.get("/calculate_distance/")
-def calculate_distance(lat1: float, lon1: float, lat2: float, lon2: float):
-    # Calculate the distance using geodesic
-    distance = geodesic((lat1, lon1), (lat2, lon2)).kilometers
-    return {"distance_km": distance}
+# Haversine distance function
+    def haversine_distance(lat1, lon1, lat2, lon2):
+        # Radius of the Earth in kilometers
+        R = 6371.0
+
+        # Convert latitude and longitude from degrees to radians
+        lat1 = radians(lat1)
+        lon1 = radians(lon1)
+        lat2 = radians(lat2)
+        lon2 = radians(lon2)
+
+        # Haversine formula
+        dlon = lon2 - lon1
+        dlat = lat2 - lat1
+        a = sin(dlat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(dlon / 2) ** 2
+        c = 2 * atan2(sqrt(a), sqrt(1 - a))
+        distance = R * c
+
+        return distance
+
+    try:
+        # Execute the SQL query to select addresses within the specified distance
+        cursor.execute("SELECT street, city, latitude, longitude FROM addresses")
+
+        addresses = cursor.fetchall()
+
+        # Filter addresses based on the distance
+        valid_addresses = []
+        for addr in addresses:
+            addr_lat, addr_lon = addr[3], addr[2]  # Swap latitude and longitude
+            distance = haversine_distance(latitude, longitude, addr_lat, addr_lon)
+            if distance <= max_distance_km:
+                valid_addresses.append(addr)
+
+        # Close the database connection
+        conn.close()
+
+        return valid_addresses
+
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=500, detail="Internal Server Error")
 
