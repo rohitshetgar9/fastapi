@@ -130,3 +130,6 @@ PUT - Update address,
 DELETE - Deleting address with id number,
 
 GET - Getting addresses within the address
+
+Note:
+Latitude is specified in degrees within the range [-90, 90]. Longitude is specified in degrees within the range [-180, 180).
