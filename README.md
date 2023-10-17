@@ -35,7 +35,7 @@ uvicorn main:app --port 8005 --reload
 # CREATE ADDRESS API:
 {
   "street": "Kolkata rolls",
-  "city": "Kolkata|",
+  "city": "Kolkata",
   "latitude": -87.629798,
   "longitude": 41.878114
 },
